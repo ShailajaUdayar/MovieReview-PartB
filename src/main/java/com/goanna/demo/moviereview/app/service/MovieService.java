@@ -3,8 +3,12 @@ package com.goanna.demo.moviereview.app.service;
 import com.goanna.demo.moviereview.app.domain.MovieDomain;
 import com.goanna.demo.moviereview.app.model.MovieModel;
 import com.goanna.demo.moviereview.app.repository.MovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,9 @@ import java.util.List;
 @Service
 public class MovieService {
 
+    @Autowired
     private final MovieRepository movieRepository;
+
 
     public MovieService(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
@@ -25,14 +31,14 @@ public class MovieService {
 
         List<MovieModel> models = new ArrayList<>();
         for (MovieDomain domain : movieDomains) {
-            models.add(map(domain));
+            models.add(mapDomainToModel(domain));
         }
 
         return models;
 
     }
 
-    private MovieModel map(MovieDomain movieDomain) {
+    private MovieModel mapDomainToModel(MovieDomain movieDomain) {
         MovieModel model = new MovieModel();
         model.setId(movieDomain.getId());
         model.setTitle(movieDomain.getTitle());
@@ -43,7 +49,7 @@ public class MovieService {
         return model;
     }
 
-    private MovieDomain map(MovieModel m) {
+    private MovieDomain mapModelToDomain(MovieModel m) {
         MovieDomain d = new MovieDomain();
         d.setTitle(m.getTitle());
         d.setActor(m.getActor());
@@ -67,7 +73,7 @@ public class MovieService {
 
 
     public Integer createMovie(MovieModel movieModel) {
-        MovieDomain domain = movieRepository.save(map(movieModel));
+        MovieDomain domain = movieRepository.save(mapModelToDomain(movieModel));
         return domain.getId();
     }
 
@@ -84,17 +90,7 @@ public class MovieService {
     }
 
     public List<MovieModel> getMoviesByActor(String actor) {
-
-        List<MovieDomain> movieDomains = movieRepository.findAll();
-
-        List<MovieModel> movies = new ArrayList<>();
-
-        for (MovieDomain domain : movieDomains) {
-            if (domain.getActor().equalsIgnoreCase(actor)) {
-                movies.add(map(domain));
-            }
-        }
-        return movies;
+       return movieRepository.findByActorIgnoreCase(actor);
     }
 
 
@@ -106,7 +102,7 @@ public class MovieService {
 
         for (MovieDomain domain : movieDomains) {
             if (domain.getGenre().equalsIgnoreCase(genre)) {
-                movies.add(map(domain));
+                movies.add(mapDomainToModel(domain));
 
             }
         }
@@ -121,7 +117,7 @@ public class MovieService {
         List<MovieModel> movies = new ArrayList<>();
         for (MovieDomain domain : movieDomains) {
             if (domain.getRating() >= rating) {
-                movies.add(map(domain));
+                movies.add(mapDomainToModel(domain));
 
             }
         }
@@ -135,7 +131,7 @@ public class MovieService {
         List<MovieModel> movies = new ArrayList<>();
         for (MovieDomain domain : movieDomains) {
             if (domain.getYear() >= year) {
-                movies.add(map(domain));
+                movies.add(mapDomainToModel(domain));
 
             }
         }
@@ -150,11 +146,24 @@ public class MovieService {
 
         for (MovieDomain domain : movieDomains) {
             if (domain.getTitle().equalsIgnoreCase(title)) {
-                movies.add(map(domain));
+                movies.add(mapDomainToModel(domain));
 
             }
         }
         return movies;
     }
 
+    public Page< MovieModel > findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.movieRepository.findAll(pageable).map(this::mapDomainToModel);
+    }
+
+    public MovieModel findMovie(Integer id) {
+        return mapDomainToModel(
+                movieRepository
+                    .findById(id)
+                    .orElseThrow(() -> new RuntimeException("Movie not found")));
+    }
 }

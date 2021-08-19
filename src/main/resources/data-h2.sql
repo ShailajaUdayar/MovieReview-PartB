@@ -17,4 +17,4 @@ INSERT INTO MOVIE(id, title, actor, genre, year, rating) VALUES (16, 'The Fast a
 INSERT INTO MOVIE(id, title, actor, genre, year, rating) VALUES (17, '3 Ninjas: High Noon at Mega Mountain', 'Hulk Hogan', 'COMEDY', 1998, 3.0);
 INSERT INTO MOVIE(id, title, actor, genre, year, rating) VALUES (18, 'Harry Potter and the Deathly Hallows: Part 2', 'Daniel Radcliffe', 'DRAMA', 2011, 8.1);
 INSERT INTO MOVIE(id, title, actor, genre, year, rating) VALUES (19, 'The Forever Purge', 'Ana de la Reguera', 'HORROR', 2021, 5.4);
-INSERT INTO MOVIE(id, title, actor, genre, year, rating) VALUES (20, 'Scream ', 'Neve Campbell', 'HORROR', 1996, 7.3);
+INSERT INTO MOVIE(id, title, actor, genre, year, rating) VALUES (20, 'Scream', 'Neve Campbell', 'HORROR', 1996, 7.3);

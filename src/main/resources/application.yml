@@ -4,7 +4,7 @@ spring:
     url: jdbc:h2:mem:movieDB
     driverClassName: org.h2.Driver
     username: sa
-    password:
+    password: sa
     platform: h2
   jpa:
     show-sql: true
@@ -14,6 +14,8 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  h2:
+    console:
+      enabled: true
 server:
   port: 8081
-
