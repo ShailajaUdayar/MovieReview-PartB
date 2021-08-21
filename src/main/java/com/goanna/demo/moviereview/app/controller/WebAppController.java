@@ -1,21 +1,26 @@
 package com.goanna.demo.moviereview.app.controller;
 
 import com.goanna.demo.moviereview.app.model.MovieModel;
+import com.goanna.demo.moviereview.app.repository.MovieRepository;
 import com.goanna.demo.moviereview.app.service.MovieService;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/app")
 public class WebAppController {
 
+    @Autowired
+    private MovieRepository movieRepository;
+
+    @Autowired
     private final MovieService movieService;
 
     public WebAppController(MovieService movieService) {
@@ -24,28 +29,73 @@ public class WebAppController {
 
     @GetMapping
     public String viewHomePage(Model model) {
-        return findPaginated(1, "title", "asc", model);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        model.addAttribute("listMovies", allMovies);
+        return "homepage";
     }
 
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
-                                @RequestParam("sortField") String sortField,
-                                @RequestParam("sortDir") String sortDir,
-                                Model model) {
-        int pageSize = 5;
+    private void populateFilterOptions(Model model, List<MovieModel> allMovies) {
+        List<MovieModel> moviesList = allMovies;
+        List<String> uniqueActors = moviesList.stream().map(MovieModel::getActor).distinct().collect(Collectors.toList());
+        model.addAttribute("uniqueActors", uniqueActors);
 
-        Page<MovieModel> page = movieService.findPaginated(pageNo, pageSize, sortField, sortDir);
-        List<MovieModel> listMovies = page.getContent();
+        List<Double> uniqueRating = moviesList.stream().map(MovieModel::getRating).distinct().collect(Collectors.toList());
+        model.addAttribute("uniqueRating", uniqueRating);
 
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
+        List<Integer> uniqueYear = moviesList.stream().map(MovieModel::getYear).distinct().collect(Collectors.toList());
+        model.addAttribute("uniqueYear", uniqueYear);
 
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        List<String> uniqueTitle = moviesList.stream().map(MovieModel::getTitle).distinct().collect(Collectors.toList());
+        model.addAttribute("uniqueTitle", uniqueTitle);
 
-        model.addAttribute("listMovies", listMovies);
-        return "index";
+        List<String> uniqueGenre= moviesList.stream().map(MovieModel::getGenre).distinct().collect(Collectors.toList());
+        model.addAttribute("uniqueGenre", uniqueGenre);
     }
-}
+
+    @GetMapping("/movies/genre/{genre}")
+    public String filterByGenre(Model model, @PathVariable String genre) {
+        List<MovieModel> moviesList = movieService.getMoviesByGenre(genre);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/actor/{actor}")
+    public String filterByActor(Model model, @PathVariable String actor) {
+        List<MovieModel> moviesList = movieService.getMoviesByActor(actor);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/title/{title}")
+    public String filterByTitle(Model model, @PathVariable String title) {
+        List<MovieModel> moviesList = movieService.getMoviesByTitle(title);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/rating/{rating}")
+    public String filterByMinimumRating(Model model, @PathVariable Integer rating) {
+        List<MovieModel> moviesList = movieService.getMoviesByMinimumRating(rating);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/year/{year}")
+    public String filterByMinimumYear(Model model, @PathVariable Integer year) {
+        List<MovieModel> moviesList = movieService.getMoviesByMinimumYear(year);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    }

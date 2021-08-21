@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<MovieDomain, Integer> {
-    List<MovieModel> findByActorIgnoreCase(String actor);
+
 
 
 }

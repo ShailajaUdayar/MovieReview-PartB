@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .navbar a:hover, .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            max-height: 300px;
+            overflow: scroll;
+        }
+        table {
+            padding: 25px;
+        }
+        table td {
+            padding: 10px;
+        }
+        table tr:nth-child(even) {
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Movie Review You Would Love to Know!!</h1>
+<h2>To infinity and beyond!!!</h2>
+
+<table class="table table-borderless table-hover table-responsive">
+    <thead style="font-weight: bold; text-transform: uppercase">
+    <tr>
+        <th>#</th>
+        <th>Genre</th>
+        <th>Title</th>
+        <th>Actor</th>
+        <th>Year</th>
+        <th>Rating</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="movie : ${listMovies}">
+        <td th:text="${movie.id}"></td>
+        <td th:text="${movie.title}"></td>
+        <td th:text="${movie.genre}"></td>
+        <td th:text="${movie.actor}"></td>
+        <td th:text="${movie.year}"></td>
+        <td th:text="${movie.rating}"></td>
+
+    </tr>
+    </tbody>
+    <div class="navbar">
+        <div class="dropdown">
+
+            <button class="dropbtn">Genre
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:href="@{'/app/movies/genre/'+${genre}}" th:each="genre : ${uniqueGenre}" th:text="${genre}"></a>
+            </div>
+        </div>
+
+
+
+        <div class="dropdown">
+
+            <button class="dropbtn">Actor
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:href="@{'/app/movies/actor/'+${actor}}" th:each="actor : ${uniqueActors}" th:text="${actor}"></a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+
+            <button class="dropbtn">Title
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:href="@{'/app/movies/title/'+${title}}" th:each="title : ${uniqueTitle}" th:text="${title}"></a>
+            </div>
+        </div>
+
+
+
+        <div class="dropdown">
+
+            <button class="dropbtn">Rating
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:href="@{'/app/movies/rating/'+${rating}}" th:each="rating : ${uniqueRating}" th:text="${rating}"></a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+
+            <button class="dropbtn">Year
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:href="@{'/app/movies/year/'+${year}}" th:each="year : ${uniqueYear}" th:text="${year}"></a>
+            </div>
+        </div>
+
+
+        <a th:href="@{/app}">Clear Filter </a>
+
+
+
+    </div>
+
+</table>
+
+</body>
+</html>

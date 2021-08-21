@@ -90,8 +90,19 @@ public class MovieService {
     }
 
     public List<MovieModel> getMoviesByActor(String actor) {
-       return movieRepository.findByActorIgnoreCase(actor);
+        List<MovieDomain> movieDomains = movieRepository.findAll();
+
+        List<MovieModel> movies = new ArrayList<>();
+
+        for (MovieDomain domain : movieDomains) {
+            if (domain.getActor().equalsIgnoreCase(actor)) {
+                movies.add(mapDomainToModel(domain));
+
+            }
+        }
+        return movies;
     }
+
 
 
     public List<MovieModel> getMoviesByGenre(String genre) {
