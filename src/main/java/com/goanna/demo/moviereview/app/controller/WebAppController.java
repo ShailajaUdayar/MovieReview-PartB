@@ -6,10 +6,9 @@ import com.goanna.demo.moviereview.app.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -95,6 +94,19 @@ public class WebAppController {
         model.addAttribute("listMovies", moviesList);
         List<MovieModel> allMovies = movieService.getAllMovies();
         populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/addMoviesForm")
+    public String loadMovieNewForm(Model model)  {
+        MovieModel models = new MovieModel();
+        model.addAttribute("model", models);
+        return "addMovies_Form";
+    }
+
+    @PostMapping("/movies/addMoviesForm")
+    public String submitForm(Model model) {
+        //System.out.println(model);
         return "homepage";
     }
 

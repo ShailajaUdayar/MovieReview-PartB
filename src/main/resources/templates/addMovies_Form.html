@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Add MOvies</title>
+
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Roboto:wght@500;700&display=swap"
+          rel="stylesheet">
+
+    <style type="text/css">
+        label {
+            display: inline-block;
+            width: 200px;
+            margin: 5px;
+            text-align: left;
+        }
+        input[type=text], input[type=password], select {
+            display: inline-block;
+            width: 200px;
+        }
+        input[type=radio] {
+            margin-left: 45px;
+        }
+        input[type=checkbox] {
+            margin-right: 190px;
+        }
+        button {
+            padding: 5px;
+            margin: 10px;
+        }
+    </style>
+
+</head>
+<body>
+
+
+<div align="center">
+    <h1>Add Movies</h1>
+    <form action="#" th:action="@{/movies/addMoviesForm}" method="get" th:object="${model}">
+        <label>Genre</label>
+        <input type="text" th:field="*{genre}" /><br/>
+
+        <label>Title</label>
+        <input type="text" th:field="*{title}" /><br/>
+
+        <label>Actor</label>
+        <input type="text" th:field="*{actor}" /><br/>
+
+        <label>Year</label>
+        <input type="text" th:field="*{year}" /><br/>
+
+        <label>Rating</label>
+        <input type="text" th:field="*{rating}" /><br/>
+
+
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+
+
+
+</body>

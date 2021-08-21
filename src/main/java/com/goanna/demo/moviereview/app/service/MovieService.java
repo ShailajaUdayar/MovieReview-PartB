@@ -177,4 +177,6 @@ public class MovieService {
                     .findById(id)
                     .orElseThrow(() -> new RuntimeException("Movie not found")));
     }
+
+
 }
