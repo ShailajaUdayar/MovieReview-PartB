@@ -9,7 +9,7 @@
 
 ## Development 
 | IDE Used | Build tool | Server | JDK | Spring Boot version | DB | Template Engine | 
-| --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
+| --- | --- | --- |--- |--- |--- |--- |
 | IntelliJ | maven | Embedded Tomcat | 1.8 | 2.5.3 | H2 | Thymeleaf | 
 
     
