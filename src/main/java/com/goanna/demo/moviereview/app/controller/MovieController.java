@@ -34,7 +34,6 @@ public class MovieController {
     public ResponseEntity<MovieModel> getMovieById(@PathVariable Integer id) {
         return ResponseEntity.ok(movieService.findMovie(id));
 
-
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -64,7 +63,7 @@ public class MovieController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/rating/{rating}")
-    public ResponseEntity<List<MovieModel>> getMoviesByMinimumRating(@PathVariable Integer rating) {
+    public ResponseEntity<List<MovieModel>> getMoviesByMinimumRating(@PathVariable Double rating) {
 
         return ResponseEntity.ok(movieService.getMoviesByMinimumRating(rating));
     }

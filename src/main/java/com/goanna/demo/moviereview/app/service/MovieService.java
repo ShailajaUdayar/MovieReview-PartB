@@ -89,6 +89,10 @@ public class MovieService {
 
     }
 
+//    public void saveMovie(MovieModel movieModel) {
+//        this.movieRepository.save(mapModelToDomain(movieModel));
+//    }
+
     public List<MovieModel> getMoviesByActor(String actor) {
         List<MovieDomain> movieDomains = movieRepository.findAll();
 
@@ -121,7 +125,7 @@ public class MovieService {
     }
 
 
-    public List<MovieModel> getMoviesByMinimumRating(int rating) {
+    public List<MovieModel> getMoviesByMinimumRating(Double rating) {
 
         List<MovieDomain> movieDomains = movieRepository.findAll();
 
@@ -177,6 +181,7 @@ public class MovieService {
                     .findById(id)
                     .orElseThrow(() -> new RuntimeException("Movie not found")));
     }
+
 
 
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Add MOvies</title>
+    <title>Add Movies</title>
 
 
 
@@ -40,9 +40,48 @@
 <body>
 
 
-<div align="center">
+<div class="container">
+
+    <hr>
+    <h2>Add Movie</h2>
+
+    <form action="#" th:action="@{/app/movies/createMovieSubmitForm}" th:object="${model}" method="POST">
+        <label>Genre</label>
+        <input type="text" th:field="*{genre}" /><br/>
+
+        <label>Title</label>
+        <input type="text" th:field="*{title}" /><br/>
+
+        <label>Actor</label>
+        <input type="text" th:field="*{actor}" /><br/>
+
+        <label>Year</label>
+        <input type="text" th:field="*{year}" /><br/>
+
+        <label>Rating</label>
+        <input type="text" th:field="*{rating}" /><br/>
+
+        <button type="submit" class="btn btn-info col-2"> Add Movie</button>
+    </form>
+
+    <hr>
+
+    <a th:href="@{/}"> Back to Movie List</a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!--<div align="center">
     <h1>Add Movies</h1>
-    <form action="#" th:action="@{/movies/addMoviesForm}" method="get" th:object="${model}">
+    <form action="#" th:action="@{app/movies/showNewMovieForm}" method="get" th:object="${model}">
         <label>Genre</label>
         <input type="text" th:field="*{genre}" /><br/>
 
@@ -59,11 +98,16 @@
         <input type="text" th:field="*{rating}" /><br/>
 
 
-        <button type="submit">Add</button>
+
+        <input type="submit" style="font-weight: bold;" class="btn btn-primary">
     </form>
-</div>
+
+
+    <div class="text-center"><a style="font-weight: bold" th:href="@{/}" class="btn btn-primary">Back</a></div>
+</div>-->
 
 
 
 
 </body>
+</html>

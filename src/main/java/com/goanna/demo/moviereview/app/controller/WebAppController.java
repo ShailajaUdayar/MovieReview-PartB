@@ -6,6 +6,7 @@ import com.goanna.demo.moviereview.app.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class WebAppController {
     }
 
     @GetMapping("/movies/rating/{rating}")
-    public String filterByMinimumRating(Model model, @PathVariable Integer rating) {
+    public String filterByMinimumRating(Model model, @PathVariable Double rating) {
         List<MovieModel> moviesList = movieService.getMoviesByMinimumRating(rating);
         model.addAttribute("listMovies", moviesList);
         List<MovieModel> allMovies = movieService.getAllMovies();
@@ -97,17 +98,68 @@ public class WebAppController {
         return "homepage";
     }
 
-    @GetMapping("/movies/addMoviesForm")
-    public String loadMovieNewForm(Model model)  {
+    @GetMapping("/movies/showNewMovieForm")
+    public String showNewMovieForm(Model model)  {
         MovieModel models = new MovieModel();
         model.addAttribute("model", models);
-        return "addMovies_Form";
+        return "new_movie";
     }
 
-    @PostMapping("/movies/addMoviesForm")
-    public String submitForm(Model model) {
-        //System.out.println(model);
+    @PostMapping("/movies/createMovieSubmitForm")
+    public String createMovie(@ModelAttribute("model") MovieModel movieModel, Model model)  {
+        this.movieService.createMovie(movieModel);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        model.addAttribute("listMovies", allMovies);
         return "homepage";
     }
+
+    @PostMapping("/movies/saveMovie")
+    public String createMovie(Model model) {
+        MovieModel models = new MovieModel();
+        this.movieService.createMovie(models);
+        model.addAttribute("model", models);
+        return "addMovies_success";
+    }
+
+
+//    @GetMapping("/movies/showNewMovieForm")
+//    public String showNewMovieForm(Model model)  {
+//        MovieModel models = new MovieModel();
+//        model.addAttribute("model", models);
+//        return "new_movie";
+//    }
+//
+//
+//    @PostMapping("/movies/saveMovie")
+//    public String createMovie(Model model) {
+//
+//        MovieModel models = new MovieModel();
+//        movieService.createMovie(models);
+//        return "homepage";
+//    }
+//    @GetMapping("/movies/showFormForUpdate/{id}")
+//    public String updateMovie(Model model) {
+//        MovieModel models = new MovieModel();
+//        movieService.updateMovie(models);
+//
+//        return "update_movie";
+//    }
+//
+//    @PostMapping("/movies/saveMovie")
+//    public String submitForm(Model model) {
+//        MovieModel models = new MovieModel();
+//        this.movieService.createMovie(models);
+//        model.addAttribute("model", models);
+//        return "addMovies_success";
+//    }
+//
+//    @GetMapping("/movies/deleteMovie/{id}")
+//    public String deleteEmployee(@PathVariable Integer id) {
+//
+//        // call delete employee method
+//        this.movieService.deleteMovie(id);
+//        return "homepage";
+//    }
 
     }
