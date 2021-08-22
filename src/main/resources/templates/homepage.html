@@ -184,13 +184,7 @@
 
 
         <a th:href="@{/app}">Clear Filter </a>
-
-        <button type="submit" class="btn btn-info col-2"> Add Movie</button>
-
-
-
-
-
+       <a th:href="@{/app/movies/showNewMovieForm}" class="btn btn-primary" th:object="${model}" method="GET">Add Movie</a>
     </div>
 
 </table>
