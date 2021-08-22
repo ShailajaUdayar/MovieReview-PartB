@@ -173,7 +173,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a th:href="@{'/app/movies/rating/'+${rating}}" th:each="rating : ${minimumRating}" th:text="'Minimum ' + ${rating}"></a>
+                <a th:href="@{'/app/movies/rating/'+${ratingEntry.value}}" th:each="ratingEntry : ${ratingsRangeMap.entrySet()}" th:text="${ratingEntry.key}"></a>
             </div>
         </div>
 
@@ -183,7 +183,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a th:href="@{'/app/movies/year/'+${year}}" th:each="year : ${minimumYear}" th:text="'Minimum ' + ${year}"></a>
+                <a th:href="@{'/app/movies/year/'+${entry.value}}" th:each="entry : ${yearsRangeMap.entrySet()}" th:text="${entry.key}"></a>
             </div>
         </div>
 

@@ -153,6 +153,32 @@ public class MovieService {
         return movies;
     }
 
+    public List<MovieModel> getMoviesByMinMaxYear(int from, int to) {
+
+        List<MovieDomain> movieDomains = movieRepository.findAll();
+
+        List<MovieModel> movies = new ArrayList<>();
+        for (MovieDomain domain : movieDomains) {
+            if (domain.getYear() >= from && domain.getYear() < to) {
+                movies.add(mapDomainToModel(domain));
+            }
+        }
+        return movies;
+    }
+
+    public List<MovieModel> getMoviesByMinMaxRatings(double from, double to) {
+
+        List<MovieDomain> movieDomains = movieRepository.findAll();
+
+        List<MovieModel> movies = new ArrayList<>();
+        for (MovieDomain domain : movieDomains) {
+            if (domain.getRating() >= from && domain.getRating() < to) {
+                movies.add(mapDomainToModel(domain));
+            }
+        }
+        return movies;
+    }
+
     public List<MovieModel> getMoviesByTitle(String title) {
 
         List<MovieDomain> movieDomains = movieRepository.findAll();

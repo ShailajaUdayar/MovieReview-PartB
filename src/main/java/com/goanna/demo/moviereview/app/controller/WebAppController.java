@@ -9,9 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -41,13 +39,37 @@ public class WebAppController {
         List<String> uniqueActors = moviesList.stream().map(MovieModel::getActor).distinct().collect(Collectors.toList());
         model.addAttribute("uniqueActors", uniqueActors);
 
-        List<Double> minimumRating = Arrays.asList(10.0, 8.0, 6.0, 4.0, 2.0, 0.0);
+        Map<String, String> yearsRange = new HashMap<>();
 
-        model.addAttribute("minimumRating", minimumRating);
+        int yearMin = 1900;
 
-        List<Integer> minimumYear = Arrays.asList(1980,1990,2000,2010,2020);
+        while (yearMin < 2020) {
+            int minimumYear = yearMin;
+            int maxYear = yearMin + 10;
+            if (allMovies.stream().anyMatch(m -> (m.getYear() > minimumYear && m.getYear() < maxYear))) {
+                yearsRange.put(minimumYear + "-" + maxYear, minimumYear + "/" + maxYear);
+            }
+            yearMin += 10;
+        }
+        model.addAttribute("yearsRangeMap", yearsRange);
 
-        model.addAttribute("minimumYear", minimumYear);
+        Map<String, String> ratingsRange = new HashMap<>();
+
+        double ratingMin = 0.0;
+
+        while (ratingMin < 10) {
+            double minimumRating = ratingMin;
+            double maxRating = ratingMin + 2.0;
+            if (allMovies.stream().anyMatch(m -> (m.getRating() > minimumRating && m.getRating() < maxRating))) {
+                ratingsRange.put(minimumRating + "-" + maxRating, minimumRating + "/" + maxRating);
+            }
+            ratingMin += 2.0;
+        }
+
+
+        model.addAttribute("ratingsRangeMap", ratingsRange);
+
+
         List<String> uniqueTitle = moviesList.stream().map(MovieModel::getTitle).distinct().collect(Collectors.toList());
         model.addAttribute("uniqueTitle", uniqueTitle);
 
@@ -85,6 +107,24 @@ public class WebAppController {
     @GetMapping("/movies/rating/{rating}")
     public String filterByMinimumRating(Model model, @PathVariable Double rating) {
         List<MovieModel> moviesList = movieService.getMoviesByMinimumRating(rating);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/year/{from}/{to}")
+    public String filterByMinMaxYear(Model model, @PathVariable Integer from, @PathVariable Integer to) {
+        List<MovieModel> moviesList = movieService.getMoviesByMinMaxYear(from, to);
+        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> allMovies = movieService.getAllMovies();
+        populateFilterOptions(model, allMovies);
+        return "homepage";
+    }
+
+    @GetMapping("/movies/rating/{from}/{to}")
+    public String filterByMinMaxRatings(Model model, @PathVariable Double from, @PathVariable Double to) {
+        List<MovieModel> moviesList = movieService.getMoviesByMinMaxRatings(from, to);
         model.addAttribute("listMovies", moviesList);
         List<MovieModel> allMovies = movieService.getAllMovies();
         populateFilterOptions(model, allMovies);
