@@ -114,8 +114,13 @@
         <th>Actor</th>
         <th>Year</th>
         <th>Rating</th>
+        <th></th>
+
     </tr>
     </thead>
+
+
+
     <tbody>
     <tr th:each="movie : ${listMovies}">
         <td th:text="${movie.id}"></td>
@@ -124,7 +129,7 @@
         <td th:text="${movie.actor}"></td>
         <td th:text="${movie.year}"></td>
         <td th:text="${movie.rating}"></td>
-
+        <td><a th:href="@{'/app/movies/deleteMovie/' + ${movie.id}}" class="btn btn-primary" th:object="${model}" method="GET">Delete</a></td>
     </tr>
     </tbody>
     <div class="navbar">
@@ -168,7 +173,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a th:href="@{'/app/movies/rating/'+${rating}}" th:each="rating : ${uniqueRating}" th:text="${rating}"></a>
+                <a th:href="@{'/app/movies/rating/'+${rating}}" th:each="rating : ${minimumRating}" th:text="'Minimum ' + ${rating}"></a>
             </div>
         </div>
 
@@ -178,13 +183,13 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a th:href="@{'/app/movies/year/'+${year}}" th:each="year : ${uniqueYear}" th:text="${year}"></a>
+                <a th:href="@{'/app/movies/year/'+${year}}" th:each="year : ${minimumYear}" th:text="'Minimum ' + ${year}"></a>
             </div>
         </div>
 
-
         <a th:href="@{/app}">Clear Filter </a>
-       <a th:href="@{/app/movies/showNewMovieForm}" class="btn btn-primary" th:object="${model}" method="GET">Add Movie</a>
+        <a th:href="@{/app/movies/showNewMovieForm}" class="btn btn-primary" th:object="${model}" method="GET">Add Movie</a>
+
     </div>
 
 </table>

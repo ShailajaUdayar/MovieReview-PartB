@@ -6,10 +6,11 @@ import com.goanna.demo.moviereview.app.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,16 +41,17 @@ public class WebAppController {
         List<String> uniqueActors = moviesList.stream().map(MovieModel::getActor).distinct().collect(Collectors.toList());
         model.addAttribute("uniqueActors", uniqueActors);
 
-        List<Double> uniqueRating = moviesList.stream().map(MovieModel::getRating).distinct().collect(Collectors.toList());
-        model.addAttribute("uniqueRating", uniqueRating);
+        List<Double> minimumRating = Arrays.asList(10.0, 8.0, 6.0, 4.0, 2.0, 0.0);
 
-        List<Integer> uniqueYear = moviesList.stream().map(MovieModel::getYear).distinct().collect(Collectors.toList());
-        model.addAttribute("uniqueYear", uniqueYear);
+        model.addAttribute("minimumRating", minimumRating);
 
+        List<Integer> minimumYear = Arrays.asList(1980,1990,2000,2010,2020);
+
+        model.addAttribute("minimumYear", minimumYear);
         List<String> uniqueTitle = moviesList.stream().map(MovieModel::getTitle).distinct().collect(Collectors.toList());
         model.addAttribute("uniqueTitle", uniqueTitle);
 
-        List<String> uniqueGenre= moviesList.stream().map(MovieModel::getGenre).distinct().collect(Collectors.toList());
+        List<String> uniqueGenre = moviesList.stream().map(MovieModel::getGenre).distinct().collect(Collectors.toList());
         model.addAttribute("uniqueGenre", uniqueGenre);
     }
 
@@ -99,67 +101,29 @@ public class WebAppController {
     }
 
     @GetMapping("/movies/showNewMovieForm")
-    public String showNewMovieForm(Model model)  {
+    public String showNewMovieForm(Model model) {
         MovieModel models = new MovieModel();
         model.addAttribute("model", models);
         return "new_movie";
     }
 
     @PostMapping("/movies/createMovieSubmitForm")
-    public String createMovie(@ModelAttribute("model") MovieModel movieModel, Model model)  {
+    public RedirectView createMovie(@ModelAttribute("model") MovieModel movieModel, Model model) {
         this.movieService.createMovie(movieModel);
-        List<MovieModel> allMovies = movieService.getAllMovies();
-        populateFilterOptions(model, allMovies);
-        model.addAttribute("listMovies", allMovies);
-        return "homepage";
+        return redirectToHomePage();
     }
 
-    @PostMapping("/movies/saveMovie")
-    public String createMovie(Model model) {
-        MovieModel models = new MovieModel();
-        this.movieService.createMovie(models);
-        model.addAttribute("model", models);
-        return "addMovies_success";
+    @GetMapping("/movies/deleteMovie/{id}")
+    public RedirectView deleteMovie(@PathVariable Integer id) {
+        this.movieService.deleteMovie(id);
+        return redirectToHomePage();
     }
 
-
-//    @GetMapping("/movies/showNewMovieForm")
-//    public String showNewMovieForm(Model model)  {
-//        MovieModel models = new MovieModel();
-//        model.addAttribute("model", models);
-//        return "new_movie";
-//    }
-//
-//
-//    @PostMapping("/movies/saveMovie")
-//    public String createMovie(Model model) {
-//
-//        MovieModel models = new MovieModel();
-//        movieService.createMovie(models);
-//        return "homepage";
-//    }
-//    @GetMapping("/movies/showFormForUpdate/{id}")
-//    public String updateMovie(Model model) {
-//        MovieModel models = new MovieModel();
-//        movieService.updateMovie(models);
-//
-//        return "update_movie";
-//    }
-//
-//    @PostMapping("/movies/saveMovie")
-//    public String submitForm(Model model) {
-//        MovieModel models = new MovieModel();
-//        this.movieService.createMovie(models);
-//        model.addAttribute("model", models);
-//        return "addMovies_success";
-//    }
-//
-//    @GetMapping("/movies/deleteMovie/{id}")
-//    public String deleteEmployee(@PathVariable Integer id) {
-//
-//        // call delete employee method
-//        this.movieService.deleteMovie(id);
-//        return "homepage";
-//    }
-
+    private RedirectView redirectToHomePage() {
+        RedirectView redirectView = new RedirectView();
+        redirectView.setContextRelative(true);
+        redirectView.setUrl("/app");
+        return redirectView;
     }
+
+}
