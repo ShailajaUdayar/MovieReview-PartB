@@ -8,9 +8,9 @@
 
 
 ## Development 
-| IDE Used | Build tool | Server | JDK | Spring Boot version | DB | Template Engine | #8 | #9 | #10 | #11
+| IDE Used | Build tool | Server | JDK | Spring Boot version | DB | Template Engine | 
 | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
-| IntelliJ | maven | Embedded Tomcat | 1.8 | 2.5.3 | H2 | Thymeleaf | 287 | 272 | 276 | 269
+| IntelliJ | maven | Embedded Tomcat | 1.8 | 2.5.3 | H2 | Thymeleaf | 
 
     
 ## High level application architecture
