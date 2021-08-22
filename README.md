@@ -76,7 +76,7 @@
 - We just need to use column name and Spring automatically provide implementation and internally generates SQL queries dynamically.
 
 ### JUnit
-- JUnit which uses a random port that wil launch embedded h2 and embedded Tomcat.
+- JUnit which uses a random port that will launch embedded H2 and embedded Tomcat.
 - Using H2, here I am using rest template so that we use exchange method to invoke rest services directly and we can process it.
 - Maps to a list of MovieModel
 - Verify if responses are not null and if status is OK.
