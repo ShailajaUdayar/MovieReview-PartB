@@ -93,7 +93,7 @@ class DemoMovieReviewAppApplicationTests {
 
 
     @Test
-    public void updateAddMovie() {
+    public void updateMovie() {
 
         MovieModel movie = new MovieModel();
         movie.setGenre("Horror");
