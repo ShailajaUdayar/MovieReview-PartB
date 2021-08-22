@@ -69,7 +69,6 @@ public class WebAppController {
 
         model.addAttribute("ratingsRangeMap", ratingsRange);
 
-
         List<String> uniqueTitle = moviesList.stream().map(MovieModel::getTitle).distinct().collect(Collectors.toList());
         model.addAttribute("uniqueTitle", uniqueTitle);
 
@@ -79,8 +78,8 @@ public class WebAppController {
 
     @GetMapping("/movies/genre/{genre}")
     public String filterByGenre(Model model, @PathVariable String genre) {
-        List<MovieModel> moviesList = movieService.getMoviesByGenre(genre);
-        model.addAttribute("listMovies", moviesList);
+        List<MovieModel> moviesByGenre = movieService.getMoviesByGenre(genre);
+        model.addAttribute("listMovies", moviesByGenre);
         List<MovieModel> allMovies = movieService.getAllMovies();
         populateFilterOptions(model, allMovies);
         return "homepage";

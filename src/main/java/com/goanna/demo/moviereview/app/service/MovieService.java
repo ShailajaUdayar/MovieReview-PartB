@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -71,7 +72,6 @@ public class MovieService {
     }
 
 
-
     public Integer createMovie(MovieModel movieModel) {
         MovieDomain domain = movieRepository.save(mapModelToDomain(movieModel));
         return domain.getId();
@@ -84,44 +84,25 @@ public class MovieService {
     }
 
     public void deleteMovie(Integer id) {
-        //movieRepository.delete(movieRepository.getById(id));
         this.movieRepository.deleteById(id);
-
     }
-
-//    public void saveMovie(MovieModel movieModel) {
-//        this.movieRepository.save(mapModelToDomain(movieModel));
-//    }
 
     public List<MovieModel> getMoviesByActor(String actor) {
-        List<MovieDomain> movieDomains = movieRepository.findAll();
-
-        List<MovieModel> movies = new ArrayList<>();
-
-        for (MovieDomain domain : movieDomains) {
-            if (domain.getActor().equalsIgnoreCase(actor)) {
-                movies.add(mapDomainToModel(domain));
-
-            }
-        }
-        return movies;
+        return movieRepository
+                .findByActorContainingIgnoreCase(actor)
+                .stream()
+                .map(this::mapDomainToModel)
+                .collect(Collectors.toList());
     }
-
 
 
     public List<MovieModel> getMoviesByGenre(String genre) {
 
-        List<MovieDomain> movieDomains = movieRepository.findAll();
-
-        List<MovieModel> movies = new ArrayList<>();
-
-        for (MovieDomain domain : movieDomains) {
-            if (domain.getGenre().equalsIgnoreCase(genre)) {
-                movies.add(mapDomainToModel(domain));
-
-            }
-        }
-        return movies;
+        return movieRepository
+                .findByGenre(genre)
+                .stream()
+                .map(this::mapDomainToModel)
+                .collect(Collectors.toList());
     }
 
 
@@ -194,7 +175,7 @@ public class MovieService {
         return movies;
     }
 
-    public Page< MovieModel > findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+    public Page<MovieModel> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
@@ -204,10 +185,9 @@ public class MovieService {
     public MovieModel findMovie(Integer id) {
         return mapDomainToModel(
                 movieRepository
-                    .findById(id)
-                    .orElseThrow(() -> new RuntimeException("Movie not found")));
+                        .findById(id)
+                        .orElseThrow(() -> new RuntimeException("Movie not found")));
     }
-
 
 
 }
